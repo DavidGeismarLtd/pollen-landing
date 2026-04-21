@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The case for boring automation — Pollen</title>
+    <meta
+      name="description"
+      content="Why Pollen uses heuristics and a sprinkle of AI — not a browser agent — and ends up faster, cheaper, and more reliable than the hype."
+    />
+    <meta property="og:title" content="The case for boring automation" />
+    <meta
+      property="og:description"
+      content="Why Pollen uses heuristics and a sprinkle of AI — not a browser agent — and ends up faster, cheaper, and more reliable than the hype."
+    />
+    <meta property="og:type" content="article" />
+    <link rel="icon" type="image/svg+xml" href="../assets/pollen.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --amber-300: #fcd34d;
+        --amber-400: #fbbf24;
+        --amber-500: #f59e0b;
+        --amber-700: #b45309;
+        --amber-900: #78350f;
+        --cream: #fef3c7;
+        --cream-soft: #fffbeb;
+        --ink: #2a1a07;
+        --ink-soft: #6b4a1f;
+        --ink-muted: #8c6a38;
+        --rule: rgba(180, 83, 9, 0.12);
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background: var(--cream-soft);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Nav */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 251, 235, 0.8);
+        border-bottom: 1px solid var(--rule);
+      }
+      .nav-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 20px;
+        color: var(--amber-900);
+        text-decoration: none;
+      }
+      .brand img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(180, 83, 9, 0.22);
+      }
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--ink-soft);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .nav-back:hover {
+        color: var(--amber-700);
+      }
+
+      /* Article */
+      article {
+        padding: 72px 0 96px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--amber-700);
+        margin-bottom: 18px;
+      }
+      article h1 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: clamp(34px, 5vw, 52px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--amber-900);
+        margin-bottom: 16px;
+      }
+      .subtitle {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(18px, 2.2vw, 22px);
+        line-height: 1.4;
+        color: var(--ink-muted);
+        margin-bottom: 40px;
+      }
+      .subtitle em {
+        color: var(--amber-700);
+      }
+      .byline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--ink-soft);
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--amber-400),
+          var(--amber-700)
+        );
+      }
+
+      article h2 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: clamp(24px, 3vw, 30px);
+        line-height: 1.2;
+        letter-spacing: -0.015em;
+        color: var(--amber-900);
+        margin-top: 56px;
+        margin-bottom: 18px;
+      }
+
+      article p {
+        font-size: 17.5px;
+        line-height: 1.7;
+        color: var(--ink);
+        margin-bottom: 22px;
+      }
+
+      article ul,
+      article ol {
+        margin: 0 0 22px 24px;
+      }
+      article li {
+        font-size: 17.5px;
+        line-height: 1.7;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      article li strong {
+        color: var(--amber-900);
+      }
+
+      article strong {
+        color: var(--amber-900);
+        font-weight: 600;
+      }
+      article em {
+        color: var(--ink);
+        font-style: italic;
+      }
+
+      article a {
+        color: var(--amber-700);
+        text-decoration: underline;
+        text-decoration-color: rgba(180, 83, 9, 0.3);
+        text-underline-offset: 3px;
+      }
+      article a:hover {
+        text-decoration-color: var(--amber-700);
+      }
+
+      article blockquote {
+        position: relative;
+        margin: 32px 0;
+        padding: 22px 28px;
+        background: linear-gradient(
+          135deg,
+          rgba(254, 243, 199, 0.6),
+          rgba(253, 230, 138, 0.35)
+        );
+        border-left: 3px solid var(--amber-500);
+        border-radius: 0 12px 12px 0;
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 19px;
+        line-height: 1.5;
+        color: var(--amber-900);
+      }
+
+      article code {
+        font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+        font-size: 0.88em;
+        background: var(--cream);
+        color: var(--amber-900);
+        padding: 2px 7px;
+        border-radius: 5px;
+        border: 1px solid var(--rule);
+      }
+
+      article pre {
+        background: #2a1a07;
+        color: #fef3c7;
+        padding: 22px 24px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 24px 0;
+        box-shadow: 0 10px 30px -12px rgba(120, 53, 15, 0.4);
+      }
+      article pre code {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        border: none;
+        font-size: inherit;
+      }
+      .tok-kw {
+        color: #fcd34d;
+      }
+      .tok-str {
+        color: #fef3c7;
+      }
+      .tok-com {
+        color: #a8956a;
+        font-style: italic;
+      }
+      .tok-fn {
+        color: #fbbf24;
+      }
+      .tok-type {
+        color: #fcd34d;
+        font-weight: 500;
+      }
+
+      article hr {
+        border: none;
+        border-top: 1px solid var(--rule);
+        margin: 48px 0;
+      }
+
+      .table-wrap {
+        margin: 32px 0;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--rule);
+        background: var(--white);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14.5px;
+      }
+      th,
+      td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--rule);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      th {
+        background: var(--cream);
+        color: var(--amber-900);
+        font-weight: 600;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      td {
+        color: var(--ink);
+        vertical-align: top;
+      }
+      td:first-child {
+        font-weight: 500;
+        color: var(--amber-900);
+      }
+      td.good {
+        color: var(--amber-700);
+      }
+
+      /* CTA at end */
+      .article-cta {
+        margin-top: 64px;
+        padding: 40px 32px;
+        background: linear-gradient(
+          135deg,
+          var(--amber-400) 0%,
+          var(--amber-500) 55%,
+          var(--amber-700) 100%
+        );
+        border-radius: 20px;
+        color: var(--cream-soft);
+        text-align: center;
+      }
+      .article-cta h3 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: var(--cream-soft);
+        margin-bottom: 8px;
+      }
+      .article-cta p {
+        color: rgba(255, 251, 235, 0.88);
+        font-size: 15px;
+        margin-bottom: 18px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 22px;
+        background: var(--cream-soft);
+        color: var(--amber-900);
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: transform 0.15s ease, background 0.2s ease;
+      }
+      .btn:hover {
+        background: var(--white);
+        transform: translateY(-1px);
+      }
+
+      /* Footer */
+      footer {
+        padding: 32px 0 48px;
+        border-top: 1px solid var(--rule);
+        font-size: 13px;
+        color: var(--ink-soft);
+        text-align: center;
+      }
+      footer a {
+        color: var(--amber-700);
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-inner">
+        <a href="../" class="brand">
+          <img src="../assets/pollen.svg" alt="Pollen logo" />
+          Pollen
+        </a>
+        <a href="../" class="nav-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Pollen
+        </a>
+      </div>
+    </nav>
+
+    <article>
+      <div class="wrap">
+        <div class="eyebrow">Philosophy</div>
+        <h1>The case for boring automation</h1>
+        <p class="subtitle">
+          Why Pollen uses heuristics and <em>a sprinkle of</em> AI — not a
+          browser agent — and ends up faster, cheaper, and more reliable than
+          the hype.
+        </p>
+
+        <p>
+          If you've been anywhere near the "AI agents" conversation in the last
+          year, you've heard this pitch: an autonomous agent looks at your
+          screen, reads the page, reasons about what to do, and clicks its way
+          through any website you point it at. Natural language in, task
+          completed out. No selectors. No scripts. No integrations.
+        </p>
+
+        <p>
+          It's a compelling demo. It's also, for the most common automation
+          task on the web — <strong>filling a form</strong> — almost always the
+          wrong tool.
+        </p>
+
+        <p>
+          Pollen takes the opposite bet. We wrote a Chrome extension that
+          captures form data on one site and fills it into a form on another,
+          across arbitrary pages we've never seen before. We considered
+          building it as an autonomous agent. We decided not to. This post
+          explains why.
+        </p>
+
+        <p>
+          The one-line summary:
+          <strong>use AI exactly where it earns its keep, and no further.</strong>
+        </p>
+
+        <hr />
+
+        <h2>What autonomous browser agents promise</h2>
+        <p>
+          The pitch writes itself. You tell an agent, "Fill the onboarding form
+          on site B with the same data I just submitted on site A." The agent:
+        </p>
+        <ol>
+          <li>Looks at your screen (or reads the DOM)</li>
+          <li>Reasons about which fields mean what</li>
+          <li>Clicks, types, scrolls, submits</li>
+        </ol>
+        <p>
+          Under the hood, it's an LLM in a tight loop with a browser driver —
+          Claude's computer use API, Browser Use, Skyvern, OpenAI Operator,
+          Stagehand, Lavague. Pick your flavor. The interface is natural
+          language; the backend is a model that generates actions.
+        </p>
+        <p>When it works, it looks like magic.</p>
+
+        <h2>What autonomous browser agents actually cost you</h2>
+        <p>
+          When it doesn't work — which is most of the time, at scale — here's
+          what you're paying:
+        </p>
+        <p>
+          <strong>Latency.</strong> A single agent run is an LLM loop. Each
+          step is: screenshot → tokenize → reason → output an action → wait for
+          the page → repeat. A single form takes
+          <strong>30 to 120 seconds</strong>. Multiply that by 100 submissions
+          and you're watching paint dry.
+        </p>
+        <p>
+          <strong>Money.</strong> Every step bills tokens. Computer-use-style
+          agents send large screenshots into the context window; DOM-reading
+          agents send chunks of serialized HTML. Real-world cost per form fill
+          lands somewhere between <strong>$0.10 and $1.00</strong>, depending
+          on model and page complexity.
+        </p>
+        <p>
+          <strong>Non-determinism.</strong> LLMs are probabilistic. Run the
+          same prompt twice, get different actions. An agent might:
+        </p>
+        <ul>
+          <li>Miss a required field and submit anyway</li>
+          <li>Pick the wrong option from a dropdown</li>
+          <li>Stop halfway because it decided it was done</li>
+          <li>Hallucinate a button that doesn't exist and refuse to continue</li>
+        </ul>
+        <p>
+          You don't find out until the submission is corrupted on the other
+          end.
+        </p>
+        <p>
+          <strong>Silent failure.</strong> When a script fails, it throws. When
+          an agent fails, it returns a plausible-looking report of success. You
+          discover the problem downstream, when someone asks why half your
+          records are blank.
+        </p>
+        <p>
+          <strong>Debuggability.</strong> Ask "why did the agent do that?" and
+          the answer is, best case, a chain-of-thought transcript. Worst case,
+          a shrug. You can't breakpoint a probability distribution.
+        </p>
+        <p>
+          <strong>Bot detection.</strong> Agents type at superhuman speeds,
+          don't move their mouse naturally, and fetch the same page in the
+          same pattern every run. CAPTCHA providers are getting better at
+          flagging this. Good luck when your monthly invoice shows up.
+        </p>
+        <p>
+          <strong>Security.</strong> Most agent architectures route your
+          credentials through a cloud service that then automates a browser to
+          log in as you. That's two extra hops of trust for every password.
+        </p>
+        <p>
+          <strong>Zero caching by default.</strong> Every run is a fresh LLM
+          trip, even for the same site you've automated a thousand times.
+          There's nothing to learn from past runs without extra engineering.
+        </p>
+        <p>
+          Put together: you're paying a lot to run a slow, unpredictable,
+          unaudited, security-questionable process that often produces the
+          wrong answer. For form filling.
+        </p>
+
+        <h2>The boring alternative</h2>
+        <p>Here's what Pollen does instead.</p>
+        <p>
+          The extension is a Chrome Manifest V3 side panel plus a content
+          script. When you visit your source site, you click Capture. A
+          deterministic DOM walk extracts every input, its label (resolved via
+          <code>&lt;label for&gt;</code>, <code>aria-label</code>, wrapping
+          <code>&lt;label&gt;</code>, placeholder, and a few more heuristics —
+          all written down as code you can read), its type, its options if
+          any, and its current value.
+        </p>
+        <p>
+          Then you navigate to the target site. You click Analyze. The
+          extension reads the target form the same way.
+        </p>
+        <p>
+          Now we have two structured lists: source fields with values, target
+          fields waiting to be filled. This is the moment AI earns its keep —
+          we send these two lists (not screenshots, not full HTML,
+          <strong>just the structured schemas</strong>) to Claude with a
+          single classification prompt:
+        </p>
+        <blockquote>
+          Here are N source fields. Here are M target fields. Return a JSON
+          array of <code>{sourceFieldIndex, targetSelector, confidence}</code>
+          pairs.
+        </blockquote>
+        <p>
+          Claude is <em>excellent</em> at this. Semantic matching between
+          "E-mail" and "contact email address" is exactly what LLMs are good
+          at. It's a one-shot task. Tokens are ~500 in, ~200 out. Cost: about
+          $0.005. Time: about 2 seconds.
+        </p>
+        <p>
+          We cache the result. Next time you go from the same source to the
+          same target, no AI call at all.
+        </p>
+        <p>Then we fill. This part is completely deterministic:</p>
+        <pre><code><span class="tok-kw">const</span> el = document.<span class="tok-fn">querySelector</span>(mapping.targetSelector);
+el.value = value;
+el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"input"</span>, { bubbles: <span class="tok-kw">true</span> }));
+el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"change"</span>, { bubbles: <span class="tok-kw">true</span> }));
+el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"blur"</span>, { bubbles: <span class="tok-kw">true</span> }));</code></pre>
+        <p>
+          That's it. No LLM, no reasoning, no uncertainty. If the selector
+          matches, the field fills. If it doesn't, we log it. Filling 50
+          fields takes <strong>50 to 200 milliseconds</strong>.
+        </p>
+
+        <h2>Where heuristics are actually better than AI</h2>
+        <p>
+          The naive take is "AI is the smart way; heuristics are the dumb
+          way." That's backwards for the specific problems we're solving.
+          Consider:
+        </p>
+        <p>
+          <strong>Detecting multi-entity forms.</strong> Some forms contain
+          data for N users in one submission:
+          <code>users[0].name</code>, <code>users[0].email</code>,
+          <code>users[1].name</code>, <code>users[1].email</code>. An agent
+          would have to infer this structure from the page each time and
+          probably get it wrong on edge cases. Pollen's detector is three
+          regexes. It's right every time, in microseconds.
+        </p>
+        <p>
+          <strong>Reading listing pages.</strong> A table of 500 rows or a
+          grid of 50 cards? An agent would try to scroll and reason its way
+          through. Pollen walks <code>&lt;table&gt;</code> and
+          <code>&lt;tbody&gt;</code>, or finds parents with 3+ same-shaped
+          children, and extracts in one pass.
+        </p>
+        <p>
+          <strong>Checkbox parsing.</strong> When a target checkbox receives
+          <code>"yes"</code>, <code>"true"</code>, <code>"on"</code>,
+          <code>"1"</code>, <code>"checked"</code>, what does it mean? An
+          agent will get it right most of the time, wrong sometimes. Pollen
+          has a 10-line function with a hardcoded list of falsy strings.
+          Covered by 25 unit tests.
+        </p>
+        <p>
+          <strong>Triggering React forms.</strong> React tracks input state
+          internally. Setting <code>.value</code> isn't enough — you have to
+          dispatch synthetic <code>input</code>/<code>change</code> events the
+          right way. Every AI agent stumbles on this eventually. Pollen does
+          it the same way every time.
+        </p>
+        <p>
+          <strong>Reliable selectors.</strong> <code>#username</code> is a
+          stable ID.
+          <code>div &gt; div &gt; form &gt; div:nth-child(3) &gt; input:nth-child(2)</code>
+          isn't. An agent has no idea which path it's picking. Pollen prefers
+          the ID, falls back to a <code>name</code> attribute, and only uses a
+          structural path as a last resort — a choice made once, cached
+          forever.
+        </p>
+        <p>
+          These are not exotic edge cases. These are the bread and butter of
+          form automation. And in each one, a deterministic implementation
+          beats a model call on every axis: correctness, speed, cost,
+          debuggability.
+        </p>
+
+        <h2>Where AI is actually better than heuristics</h2>
+        <p>
+          The one place we can't beat AI is arbitrary semantic matching across
+          sites we've never seen. Example:
+        </p>
+        <ul>
+          <li>Source label: <code>Numéro de téléphone*</code></li>
+          <li>Target label: <code>Contact phone number</code></li>
+        </ul>
+        <p>
+          A hard-coded rule would need to anticipate every language, every
+          phrasing, every synonym. Claude just knows these mean the same
+          thing. That's what we use it for. <strong>Once.</strong> Per
+          source-target pair.
+        </p>
+        <p>
+          If a power user wants to adjust a mapping — say, "actually point our
+          <code>email</code> field at the target's <code>work_email</code>,
+          not <code>personal_email</code>" — that's a dropdown in the UI, not
+          a re-prompt.
+        </p>
+
+        <h2>The numbers</h2>
+        <p>For a typical form fill with ~10 fields:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Pollen</th>
+                <th>Autonomous browser agent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>First fill (with AI)</td>
+                <td class="good">~2s + 200ms</td>
+                <td>~60s</td>
+              </tr>
+              <tr>
+                <td>Subsequent fills</td>
+                <td class="good">~200ms</td>
+                <td>~60s (every time)</td>
+              </tr>
+              <tr>
+                <td>First fill cost</td>
+                <td class="good">~$0.005</td>
+                <td>~$0.25</td>
+              </tr>
+              <tr>
+                <td>Subsequent fill cost</td>
+                <td class="good">$0.00</td>
+                <td>~$0.25 (every time)</td>
+              </tr>
+              <tr>
+                <td>Deterministic?</td>
+                <td class="good">Yes, after mapping</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Cacheable?</td>
+                <td class="good">Fully</td>
+                <td>Not without rearchitecting</td>
+              </tr>
+              <tr>
+                <td>Debuggable?</td>
+                <td class="good">Every decision is in code</td>
+                <td>LLM chain-of-thought</td>
+              </tr>
+              <tr>
+                <td>Fails loudly?</td>
+                <td class="good">Yes (selector miss logs)</td>
+                <td>Rarely (silent wrong fill)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          After ten runs of the same flow, Pollen has made
+          <strong>one</strong> AI call. An agent has made ten and will make
+          ten more tomorrow.
+        </p>
+
+        <h2>The reliability number</h2>
+        <p>
+          We wouldn't claim "100% reliable for every website on the internet"
+          — that's marketing talk, and the internet is a hostile environment
+          (iframes, shadow DOM, anti-automation heuristics, custom React
+          widgets, CSP restrictions). What we <em>will</em> claim is this:
+        </p>
+        <blockquote>
+          Once a mapping is established, the fill step itself is
+          deterministic. The same inputs produce the same DOM mutations, every
+          time, measured in milliseconds.
+        </blockquote>
+        <p>
+          That's a much stronger guarantee than an agent can ever give,
+          because an agent's fill step is itself a sampled token sequence.
+          Pollen's variance lives entirely in the mapping step — where you can
+          <em>see</em> it (we show confidence scores), override it (click to
+          re-map), and freeze it (it's cached).
+        </p>
+        <p>
+          You don't have to trust the model at runtime. You just have to trust
+          it for thirty seconds during setup.
+        </p>
+
+        <h2>When would you still want a full agent?</h2>
+        <p>Honestly:</p>
+        <ul>
+          <li>
+            <strong>Multi-step reasoning tasks.</strong> If the workflow is
+            "find the order with the latest ship date, check if the carrier
+            supports two-day delivery, then request a refund through whichever
+            flow that vendor offers" — that's an agent problem. No heuristic
+            can express "check, then branch, then compose."
+          </li>
+          <li>
+            <strong>Truly novel UI discovery.</strong> A site with a genuinely
+            unique interaction that's never been scripted before, where you
+            want the machine to figure it out.
+          </li>
+          <li>
+            <strong>Research and synthesis.</strong> Crawling, summarizing,
+            comparing — the classic agent sweet spot.
+          </li>
+        </ul>
+        <p>
+          If you're filling forms, submitting data, scraping listings into a
+          target flow, or repeatedly doing the same multi-site handoff — every
+          one of those problems is bounded, structured, and repeat. The
+          structure is what heuristics eat for breakfast.
+        </p>
+
+        <h2>The takeaway</h2>
+        <p>The debate is not "AI vs no AI." It's "how much AI, used where?"</p>
+        <p>
+          Autonomous browser agents say: all AI, everywhere, every time. Pay
+          in time, money, and trust.
+        </p>
+        <p>
+          Pollen says:
+          <strong
+            >heuristics for the mechanical work, a sprinkle of AI for the one
+            classification step that genuinely needs it, and caching so you
+            never pay twice.</strong
+          >
+          Fast enough to be imperceptible. Cheap enough to be free after the
+          first run. Deterministic enough to trust unattended.
+        </p>
+        <p>
+          The hype cycle will swing back. When it does, boring automation will
+          still be here — quietly finishing in 200 milliseconds while the
+          agent in the next tab is still reading the page.
+        </p>
+
+        <div class="article-cta">
+          <h3>Want to try it?</h3>
+          <p>Pollen is launching soon. Join the waitlist for early access.</p>
+          <a href="../#waitlist" class="btn">
+            Join the waitlist
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <footer>
+      <div class="wrap">
+        <a href="../">← Back to Pollen</a>
+      </div>
+    </footer>
+  </body>
+</html>

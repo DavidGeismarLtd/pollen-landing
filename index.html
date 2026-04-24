@@ -577,6 +577,133 @@
         line-height: 1.6;
       }
 
+      /* ---------- Why Pollen (positioning) ---------- */
+      .why-pollen-lead {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(20px, 2.4vw, 24px);
+        line-height: 1.4;
+        color: var(--amber-900);
+        max-width: 780px;
+        margin-bottom: 48px;
+      }
+      .why-pollen-lead em {
+        color: var(--amber-700);
+        font-style: italic;
+      }
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      @media (max-width: 820px) {
+        .why-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .why-card {
+        background: var(--white);
+        border-radius: 18px;
+        padding: 30px 28px;
+        border: 1px solid rgba(180, 83, 9, 0.08);
+        box-shadow: 0 2px 10px rgba(120, 53, 15, 0.04);
+        position: relative;
+        overflow: hidden;
+      }
+      .why-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--amber-400),
+          var(--amber-500),
+          var(--amber-700)
+        );
+      }
+      .why-card-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(
+          135deg,
+          var(--cream) 0%,
+          var(--amber-300) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+        color: var(--amber-700);
+      }
+      .why-card h3 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 20px;
+        color: var(--amber-900);
+        margin-bottom: 10px;
+        line-height: 1.25;
+      }
+      .why-card p {
+        font-size: 15px;
+        color: var(--ink-soft);
+        line-height: 1.6;
+      }
+
+      /* ---------- Four guarantees (philosophy badge row) ---------- */
+      .guarantees {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 36px 0 28px;
+        padding: 22px;
+        background: var(--white);
+        border: 1px solid rgba(180, 83, 9, 0.1);
+        border-radius: 14px;
+      }
+      @media (max-width: 820px) {
+        .guarantees {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        .guarantees {
+          grid-template-columns: 1fr;
+        }
+      }
+      .guarantee {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13.5px;
+        line-height: 1.4;
+        color: var(--ink);
+      }
+      .guarantee-check {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--amber-400),
+          var(--amber-700)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cream-soft);
+        margin-top: 1px;
+      }
+      .guarantee strong {
+        color: var(--amber-900);
+        font-weight: 600;
+      }
+
       /* ---------- Features (what it handles) ---------- */
       .features-wrap {
         background: linear-gradient(
@@ -910,6 +1037,7 @@
         </a>
         <div class="nav-links">
           <a href="#how">How it works</a>
+          <a href="#why-pollen">Why Pollen</a>
           <a href="#handles">What it handles</a>
           <a href="#philosophy">Philosophy</a>
           <a href="blog/the-case-for-boring-automation.html">Blog</a>
@@ -1085,6 +1213,61 @@
       </div>
     </section>
 
+    <!-- WHY POLLEN -->
+    <section id="why-pollen">
+      <div class="wrap">
+        <div class="section-eyebrow">The right tool for the job</div>
+        <h2>When Pollen is the answer.</h2>
+        <p class="why-pollen-lead">
+          Most automation tools assume there's an API. Most AI agents assume
+          you want to hand over the keys. Pollen is for the jobs
+          <em>in between</em> — the ones where humans are still copy-pasting,
+          because nothing else fits.
+        </p>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </div>
+            <h3>No API? No problem.</h3>
+            <p>
+              Government portals, legacy SaaS, internal dashboards, tools that
+              charge for API access. Anywhere humans currently copy-paste
+              between tabs, Pollen automates — using the same UI you already
+              use.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+            </div>
+            <h3>Lighter than Zapier or n8n.</h3>
+            <p>
+              No integrator to hire. No workflow builder to learn. No
+              "connect your accounts" dance. Pollen lives in your browser,
+              in the flow of your work — set it up in two minutes, in the
+              tab where you're already working.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Safer than an AI agent.</h3>
+            <p>
+              You review every mapping before it runs. Field values never
+              leave your browser — only field labels hit the Claude API. One
+              cached call per form, not a 60-second non-deterministic loop
+              that burns tokens on every run.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- WHAT IT HANDLES -->
     <section id="handles" class="features-wrap">
       <div class="wrap">
@@ -1226,6 +1409,33 @@
               freeze it. You don't trust the model at runtime — you review
               setup, then it just runs.
             </p>
+          </div>
+        </div>
+
+        <div class="guarantees" aria-label="Our four guarantees">
+          <div class="guarantee">
+            <span class="guarantee-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <span><strong>Humans review</strong> every mapping</span>
+          </div>
+          <div class="guarantee">
+            <span class="guarantee-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <span><strong>Field values</strong> never leave your browser</span>
+          </div>
+          <div class="guarantee">
+            <span class="guarantee-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <span><strong>~$0.005 per form</strong> · cached forever</span>
+          </div>
+          <div class="guarantee">
+            <span class="guarantee-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <span><strong>200 ms fills</strong> · not 60-second agent loops</span>
           </div>
         </div>
 

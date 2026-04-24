@@ -805,6 +805,130 @@
         color: var(--ink-soft);
       }
 
+      /* ---------- Case studies ---------- */
+      .case-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 0;
+        background: var(--white);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(180, 83, 9, 0.08);
+        box-shadow: 0 20px 50px -20px rgba(120, 53, 15, 0.25);
+      }
+      @media (max-width: 820px) {
+        .case-card {
+          grid-template-columns: 1fr;
+        }
+      }
+      .case-body {
+        padding: 36px 40px;
+      }
+      .case-tag {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--amber-700);
+        background: var(--cream);
+        padding: 4px 10px;
+        border-radius: 999px;
+        margin-bottom: 18px;
+      }
+      .case-body h3 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: clamp(22px, 2.6vw, 28px);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        color: var(--amber-900);
+        margin-bottom: 16px;
+      }
+      .case-body p {
+        font-size: 15.5px;
+        color: var(--ink-soft);
+        line-height: 1.65;
+        margin-bottom: 14px;
+      }
+      .case-body p:last-of-type {
+        margin-bottom: 0;
+      }
+      .case-body p strong {
+        color: var(--amber-900);
+        font-weight: 600;
+      }
+      .case-metrics {
+        background: linear-gradient(
+          135deg,
+          var(--amber-400) 0%,
+          var(--amber-500) 55%,
+          var(--amber-700) 100%
+        );
+        padding: 36px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        position: relative;
+      }
+      .case-metrics::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 251, 235, 0.18) 0%,
+            transparent 45%
+          );
+        pointer-events: none;
+      }
+      .metric {
+        position: relative;
+        color: var(--cream-soft);
+      }
+      .metric-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 251, 235, 0.75);
+        margin-bottom: 4px;
+      }
+      .metric-value {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: clamp(28px, 3.5vw, 36px);
+        line-height: 1.05;
+        color: var(--cream-soft);
+      }
+      .metric-value .unit {
+        font-size: 0.55em;
+        font-weight: 500;
+        opacity: 0.8;
+        margin-left: 2px;
+      }
+      .metric-arrow {
+        position: relative;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 251, 235, 0.18);
+        border: 1px solid rgba(255, 251, 235, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cream-soft);
+      }
+      .case-footnote {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 13px;
+        color: var(--ink-soft);
+        font-style: italic;
+      }
+
       /* ---------- CTA ---------- */
       .cta-band {
         background: linear-gradient(
@@ -1039,6 +1163,7 @@
           <a href="#how">How it works</a>
           <a href="#why-pollen">Why Pollen</a>
           <a href="#handles">What it handles</a>
+          <a href="#cases">Case studies</a>
           <a href="#philosophy">Philosophy</a>
           <a href="blog/the-case-for-boring-automation.html">Blog</a>
           <a href="#waitlist" class="btn btn-primary">
@@ -1362,6 +1487,57 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- CASE STUDIES -->
+    <section id="cases">
+      <div class="wrap">
+        <div class="section-eyebrow">Case studies</div>
+        <h2>Real teams, real time saved.</h2>
+        <p class="section-lead">
+          Pollen is already at work where APIs aren't — turning hours of
+          back-and-forth into a few minutes a week.
+        </p>
+
+        <div class="case-card">
+          <div class="case-body">
+            <span class="case-tag">Insurance operations</span>
+            <h3>
+              How Pollen helps insurance operators automate manual tasks.
+            </h3>
+            <p>
+              Operators at our partner were making
+              <strong>dozens of round-trips every day</strong> between the
+              insurer's portal and their internal tool — copying fields
+              across tabs, one policy at a time. Hundreds of minutes a
+              week, per person, gone.
+            </p>
+            <p>
+              With Pollen, the same workflow now takes
+              <strong>about 5 minutes a week</strong>. No integrator. No
+              API access. No autonomous agent touching sensitive policy
+              data. Just a captured mapping, filled deterministically,
+              every time.
+            </p>
+          </div>
+
+          <div class="case-metrics" aria-label="Before and after metrics">
+            <div class="metric">
+              <div class="metric-label">Before</div>
+              <div class="metric-value">100s<span class="unit"> min / week</span></div>
+            </div>
+            <div class="metric-arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </div>
+            <div class="metric">
+              <div class="metric-label">After Pollen</div>
+              <div class="metric-value">~5<span class="unit"> min / week</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="case-footnote">More case studies coming as Pollen leaves beta.</p>
       </div>
     </section>
 

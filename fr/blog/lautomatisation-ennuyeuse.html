@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>L'argument pour l'automatisation ennuyeuse — Pollen</title>
+    <title>Plaidoyer pour l'automatisation ennuyeuse — Pollen</title>
     <meta
       name="description"
-      content="Pourquoi Pollen utilise des heuristiques et une touche d'IA — pas un agent navigateur — et finit par être plus rapide, moins cher et plus fiable que la hype."
+      content="Pourquoi Pollen mise sur des heuristiques et une touche d'IA — plutôt qu'un agent navigateur — et se révèle plus rapide, moins cher et plus fiable que la hype."
     />
-    <meta property="og:title" content="L'argument pour l'automatisation ennuyeuse" />
+    <meta property="og:title" content="Plaidoyer pour l'automatisation ennuyeuse" />
     <meta
       property="og:description"
-      content="Pourquoi Pollen utilise des heuristiques et une touche d'IA — pas un agent navigateur — et finit par être plus rapide, moins cher et plus fiable que la hype."
+      content="Pourquoi Pollen mise sur des heuristiques et une touche d'IA — plutôt qu'un agent navigateur — et se révèle plus rapide, moins cher et plus fiable que la hype."
     />
     <meta property="og:type" content="article" />
     <link rel="icon" type="image/svg+xml" href="/assets/pollen.svg" />
@@ -448,162 +448,165 @@
     <article>
       <div class="wrap">
         <div class="eyebrow">Philosophie</div>
-        <h1>L'argument pour l'automatisation ennuyeuse</h1>
+        <h1>Plaidoyer pour l'automatisation ennuyeuse</h1>
         <p class="subtitle">
-          Pourquoi Pollen utilise des heuristiques et <em>une touche</em>
-          d'IA — pas un agent navigateur — et finit par être plus rapide,
-          moins cher et plus fiable que la hype.
+          Pourquoi Pollen mise sur des heuristiques et <em>une touche</em>
+          d'IA — plutôt qu'un agent navigateur — et se révèle au final
+          plus rapide, moins cher et plus fiable que la hype.
         </p>
 
         <p>
           Si vous avez suivi la conversation sur les « agents IA » ces
-          derniers mois, vous avez entendu ce pitch : un agent autonome
-          regarde votre écran, lit la page, raisonne sur ce qu'il faut
-          faire, et clique son chemin à travers n'importe quel site web.
-          Langage naturel en entrée, tâche accomplie en sortie. Pas de
-          sélecteurs. Pas de scripts. Pas d'intégrations.
+          derniers mois, vous avez sûrement entendu ce pitch : un agent
+          autonome regarde votre écran, lit la page, réfléchit à ce qu'il
+          faut faire, et se fraie un chemin sur n'importe quel site.
+          Langage naturel en entrée, tâche accomplie en sortie. Plus de
+          sélecteurs. Plus de scripts. Plus d'intégrations.
         </p>
 
         <p>
-          C'est une démo convaincante. C'est aussi, pour la tâche
-          d'automatisation la plus courante sur le web —
-          <strong>remplir un formulaire</strong> — presque toujours le
-          mauvais outil.
+          La démo est bluffante. Mais pour la tâche la plus courante sur le
+          web — <strong>remplir un formulaire</strong> — c'est presque
+          toujours le mauvais outil.
         </p>
 
         <p>
-          Pollen prend le pari inverse. Nous avons écrit une extension
-          Chrome qui capture les données d'un formulaire sur un site et les
-          remplit dans un formulaire d'un autre, sur des pages arbitraires
-          que nous n'avons jamais vues. Nous avons envisagé de la construire
-          comme un agent autonome. Nous avons décidé de ne pas le faire. Cet
-          article explique pourquoi.
+          Pollen a fait le pari inverse. On a écrit une extension Chrome
+          qui capture les données d'un formulaire sur un site et les
+          rejoue dans un formulaire d'un autre, y compris sur des pages
+          qu'on n'a jamais vues. On a envisagé de la bâtir comme un agent
+          autonome. On a choisi de ne pas le faire. Cet article explique
+          pourquoi.
         </p>
 
         <p>
-          Résumé en une ligne :
-          <strong>utiliser l'IA exactement là où elle apporte de la valeur, et pas plus loin.</strong>
+          Le résumé en une ligne :
+          <strong>utiliser l'IA pile là où elle apporte de la valeur, et pas plus loin.</strong>
         </p>
 
         <hr />
 
         <h2>Ce que promettent les agents navigateur autonomes</h2>
         <p>
-          Le pitch s'écrit tout seul. Vous dites à un agent : « Remplis le
-          formulaire d'inscription sur le site B avec les mêmes données que
-          je viens de soumettre sur le site A. » L'agent :
+          Le pitch s'écrit tout seul. Vous dites à un agent : « Remplis
+          le formulaire d'inscription du site B avec les mêmes données
+          que je viens de soumettre sur le site A. » L'agent :
         </p>
         <ol>
           <li>Regarde votre écran (ou lit le DOM)</li>
-          <li>Raisonne sur ce que veulent dire les champs</li>
-          <li>Clique, tape, fait défiler, soumet</li>
+          <li>Déduit le sens de chaque champ</li>
+          <li>Clique, tape, scrolle, soumet</li>
         </ol>
         <p>
           Sous le capot, c'est un LLM dans une boucle serrée avec un driver
           de navigateur — computer use API de Claude, Browser Use, Skyvern,
-          OpenAI Operator, Stagehand, Lavague. Choisissez votre arme.
-          L'interface c'est du langage naturel ; le backend c'est un modèle
-          qui génère des actions.
+          OpenAI Operator, Stagehand, Lavague. Choisissez votre poison.
+          L'interface, c'est du langage naturel ; le backend, c'est un
+          modèle qui génère des actions.
         </p>
-        <p>Quand ça marche, ça a l'air magique.</p>
+        <p>Quand ça marche, on croirait à de la magie.</p>
 
         <h2>Ce que les agents navigateur autonomes vous coûtent vraiment</h2>
         <p>
-          Quand ça ne marche pas — c'est-à-dire la plupart du temps, à
-          grande échelle — voici ce que vous payez :
+          Quand ça ne marche pas — c'est-à-dire la plupart du temps, dès
+          qu'on passe à l'échelle — voilà la facture :
         </p>
         <p>
-          <strong>Latence.</strong> Une exécution d'agent, c'est une boucle
-          LLM. Chaque étape : capture d'écran → tokenisation → raisonnement
-          → action → attente de la page → on recommence. Un seul formulaire
-          prend <strong>30 à 120 secondes</strong>. Multipliez ça par 100
-          soumissions et vous regardez la peinture sécher.
+          <strong>Latence.</strong> Une exécution d'agent, c'est une
+          boucle LLM. À chaque étape : capture d'écran → tokenisation →
+          raisonnement → action → on attend que la page réponde → on
+          recommence. Un seul formulaire prend
+          <strong>30 à 120 secondes</strong>. Multipliez par 100
+          soumissions et vous avez largement le temps de regarder la
+          peinture sécher.
         </p>
         <p>
-          <strong>Argent.</strong> Chaque étape facture des tokens. Les
-          agents style computer-use envoient des captures d'écran entières
-          dans le contexte ; les agents qui lisent le DOM envoient des
-          morceaux de HTML sérialisé. Le coût réel par remplissage se
-          situe entre <strong>0,10 $ et 1,00 $</strong>, selon le modèle
-          et la complexité de la page.
+          <strong>Argent.</strong> Chaque étape consomme des tokens. Les
+          agents façon computer-use envoient des captures d'écran
+          entières dans la fenêtre de contexte ; ceux qui lisent le DOM
+          envoient des bouts de HTML sérialisé. En pratique, un
+          remplissage coûte entre <strong>0,10 $ et 1,00 $</strong>,
+          selon le modèle et la complexité de la page.
         </p>
         <p>
           <strong>Non-déterminisme.</strong> Les LLM sont probabilistes.
-          Lancez deux fois le même prompt, obtenez deux actions
-          différentes. Un agent peut :
+          Deux fois le même prompt, deux actions différentes. Un agent
+          peut tout à fait :
         </p>
         <ul>
-          <li>Rater un champ obligatoire et soumettre quand même</li>
+          <li>Louper un champ obligatoire et soumettre quand même</li>
           <li>Choisir la mauvaise option dans une liste déroulante</li>
-          <li>S'arrêter à mi-chemin parce qu'il pense avoir fini</li>
-          <li>Halluciner un bouton qui n'existe pas et refuser de continuer</li>
+          <li>S'arrêter en cours de route parce qu'il se croit arrivé</li>
+          <li>Halluciner un bouton qui n'existe pas et refuser d'avancer</li>
         </ul>
         <p>
-          Vous ne le découvrez qu'une fois la soumission déjà corrompue à
-          l'autre bout.
+          Et vous ne le découvrez qu'une fois la soumission déjà corrompue
+          de l'autre côté.
         </p>
         <p>
           <strong>Échec silencieux.</strong> Un script qui plante lève une
-          exception. Un agent qui échoue renvoie un rapport de succès
-          plausible. Vous découvrez le problème plus tard, quand quelqu'un
-          demande pourquoi la moitié de vos enregistrements sont vides.
+          exception. Un agent qui échoue renvoie un rapport de succès qui
+          a l'air plausible. Vous découvrez le problème plus tard, quand
+          quelqu'un vous demande pourquoi la moitié des enregistrements
+          sont vides.
         </p>
         <p>
-          <strong>Débogabilité.</strong> Demandez « pourquoi l'agent a
-          fait ça ? » et la réponse, dans le meilleur des cas, est une
-          trace de chaîne de pensée. Dans le pire, un haussement d'épaules.
-          On ne pose pas de breakpoint sur une distribution de probabilité.
+          <strong>Débogabilité.</strong> Vous demandez « pourquoi l'agent
+          a fait ça ? » Dans le meilleur des cas, vous avez une trace de
+          chaîne de pensée. Dans le pire, un haussement d'épaules. On ne
+          pose pas de breakpoint sur une distribution de probabilités.
         </p>
         <p>
           <strong>Détection de bots.</strong> Les agents tapent à des
-          vitesses surhumaines, ne bougent pas la souris naturellement, et
-          récupèrent la même page selon le même schéma à chaque
-          exécution. Les fournisseurs de CAPTCHA s'améliorent pour
-          signaler ce comportement. Bonne chance quand la facture
-          mensuelle arrive.
+          vitesses surhumaines, bougent la souris n'importe comment, et
+          consultent la même page selon le même schéma à chaque
+          exécution. Les fournisseurs de CAPTCHA sont de plus en plus
+          doués pour repérer ça. Bonne chance quand la facture mensuelle
+          arrive.
         </p>
         <p>
-          <strong>Sécurité.</strong> La plupart des architectures d'agents
-          font transiter vos identifiants par un service cloud qui pilote
-          ensuite un navigateur pour se connecter à votre place. Ça fait
-          deux sauts de confiance supplémentaires pour chaque mot de passe.
+          <strong>Sécurité.</strong> La plupart des architectures
+          d'agents font transiter vos identifiants par un service cloud
+          qui pilote ensuite un navigateur pour se connecter à votre
+          place. Ça fait deux intermédiaires de confiance de plus pour
+          chaque mot de passe.
         </p>
         <p>
           <strong>Zéro cache par défaut.</strong> Chaque exécution est un
-          nouvel appel LLM, même pour un site que vous automatisez depuis
-          mille fois. Il n'y a rien à apprendre des exécutions passées
-          sans travail d'ingénierie supplémentaire.
+          nouvel appel LLM, même pour un site que vous avez déjà
+          automatisé mille fois. Rien n'est retenu d'une fois sur
+          l'autre, sauf à rajouter soi-même la logique qui va bien.
         </p>
         <p>
-          Au final : vous payez cher pour lancer un processus lent,
-          imprévisible, non auditable et de sécurité douteuse qui produit
-          souvent la mauvaise réponse. Pour remplir un formulaire.
+          Au final : vous payez cher pour faire tourner un processus
+          lent, imprévisible, non auditable et de sécurité douteuse, qui
+          rate souvent sa cible. Pour remplir un formulaire.
         </p>
 
         <h2>L'alternative ennuyeuse</h2>
-        <p>Voici ce que fait Pollen à la place.</p>
+        <p>Voilà ce que Pollen fait à la place.</p>
         <p>
-          L'extension est un panneau latéral Chrome Manifest V3 plus un
-          content script. Quand vous visitez votre site source, vous
-          cliquez sur Capturer. Un parcours déterministe du DOM extrait
-          chaque input, son intitulé (résolu via
-          <code>&lt;label for&gt;</code>, <code>aria-label</code>,
-          <code>&lt;label&gt;</code> englobant, placeholder, et quelques
-          heuristiques de plus — toutes écrites sous forme de code que
-          vous pouvez lire), son type, ses options s'il y en a, et sa
-          valeur actuelle.
+          L'extension, c'est un panneau latéral Chrome Manifest V3 plus
+          un content script. Sur votre site source, vous cliquez sur
+          Capturer. Un parcours déterministe du DOM récupère chaque
+          input, son libellé (résolu via <code>&lt;label for&gt;</code>,
+          <code>aria-label</code>, <code>&lt;label&gt;</code> englobant,
+          placeholder, et quelques heuristiques en plus — toutes dans du
+          code que vous pouvez lire), son type, ses options s'il y en a,
+          et sa valeur courante.
         </p>
         <p>
-          Ensuite, vous naviguez vers le site cible. Vous cliquez sur
-          Analyser. L'extension lit le formulaire cible de la même façon.
+          Ensuite, vous passez sur le site cible. Vous cliquez sur
+          Analyser. L'extension lit le formulaire cible de la même
+          manière.
         </p>
         <p>
-          Maintenant nous avons deux listes structurées : les champs
-          source avec leurs valeurs, les champs cibles en attente de
-          remplissage. C'est le moment où l'IA gagne son salaire — nous
-          envoyons ces deux listes (pas de captures d'écran, pas de HTML
-          complet, <strong>juste les schémas structurés</strong>) à Claude
-          avec un unique prompt de classification :
+          On a donc deux listes structurées : les champs source avec
+          leurs valeurs, les champs cibles qui attendent d'être remplis.
+          C'est le moment où l'IA gagne son salaire — on envoie ces deux
+          listes (pas de captures d'écran, pas de HTML brut,
+          <strong>juste les schémas structurés</strong>) à Claude avec un
+          seul prompt de classification :
         </p>
         <blockquote>
           Voici N champs source. Voici M champs cibles. Retournez un tableau
@@ -611,17 +614,17 @@
           <code>{sourceFieldIndex, targetSelector, confidence}</code>.
         </blockquote>
         <p>
-          Claude est <em>excellent</em> à ça. L'appariement sémantique
-          entre « E-mail » et « adresse email de contact » est exactement
-          ce que les LLM savent faire. C'est une tâche one-shot. ~500
-          tokens en entrée, ~200 en sortie. Coût : environ 0,005 $.
-          Temps : environ 2 secondes.
+          Claude est <em>excellent</em> pour ça. Faire correspondre
+          sémantiquement « E-mail » et « adresse email de contact »,
+          c'est exactement ce que les LLM savent faire. C'est une tâche
+          en one-shot. ~500 tokens en entrée, ~200 en sortie. Coût :
+          environ 0,005 $. Temps : environ 2 secondes.
         </p>
         <p>
-          On met le résultat en cache. La prochaine fois que vous allez
-          du même source à la même cible, aucun appel IA.
+          On met le résultat en cache. La prochaine fois que vous partez
+          de la même source vers la même cible, aucun appel IA.
         </p>
-        <p>Ensuite on remplit. Cette partie est totalement déterministe :</p>
+        <p>Puis on remplit. Cette partie est 100 % déterministe :</p>
         <pre><code><span class="tok-kw">const</span> el = document.<span class="tok-fn">querySelector</span>(mapping.targetSelector);
 el.value = value;
 el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"input"</span>, { bubbles: <span class="tok-kw">true</span> }));
@@ -634,81 +637,83 @@ el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <sp
           <strong>50 à 200 millisecondes</strong>.
         </p>
 
-        <h2>Là où les heuristiques sont en fait meilleures que l'IA</h2>
+        <h2>Là où les heuristiques battent vraiment l'IA</h2>
         <p>
-          La vision naïve, c'est « l'IA est la voie intelligente ; les
-          heuristiques sont la voie bête ». C'est l'inverse pour les
-          problèmes spécifiques qu'on résout. Exemples :
+          L'idée reçue, c'est que « l'IA, c'est malin ; les heuristiques,
+          c'est bête ». Pour les problèmes qu'on résout, c'est l'inverse.
+          Quelques exemples :
         </p>
         <p>
-          <strong>Détecter les formulaires multi-entités.</strong> Certains
-          formulaires contiennent les données de N utilisateurs en une
-          seule soumission : <code>users[0].name</code>,
+          <strong>Détecter les formulaires multi-entités.</strong>
+          Certains formulaires contiennent les données de N utilisateurs
+          en une seule soumission : <code>users[0].name</code>,
           <code>users[0].email</code>, <code>users[1].name</code>,
-          <code>users[1].email</code>. Un agent devrait déduire cette
-          structure de la page à chaque fois et se tromperait probablement
-          sur les cas limites. Le détecteur de Pollen, c'est trois regex.
-          Correct à chaque coup, en microsecondes.
+          <code>users[1].email</code>. Un agent devrait inférer cette
+          structure à chaque fois — et se tromperait forcément sur les
+          cas tordus. Le détecteur de Pollen, c'est trois regex. Juste,
+          à chaque coup, en microsecondes.
         </p>
         <p>
           <strong>Lire les pages de listes.</strong> Un tableau de 500
-          lignes ou une grille de 50 cartes ? Un agent essaierait de
-          scroller et de raisonner son chemin à travers. Pollen parcourt
+          lignes ou une grille de 50 cartes ? Un agent tenterait de
+          scroller et de s'y retrouver à la lecture. Pollen parcourt
           <code>&lt;table&gt;</code> et <code>&lt;tbody&gt;</code>, ou
-          trouve des parents avec 3 enfants de même forme et plus, et
-          extrait en une passe.
+          repère des parents avec trois enfants ou plus de même structure,
+          et extrait tout en une passe.
         </p>
         <p>
-          <strong>Parsing de cases à cocher.</strong> Quand une case cible
-          reçoit <code>"yes"</code>, <code>"true"</code>,
-          <code>"on"</code>, <code>"1"</code>, <code>"checked"</code>, que
-          faut-il comprendre ? Un agent aura raison la plupart du temps,
-          tort parfois. Pollen a une fonction de 10 lignes avec une liste
-          codée en dur de chaînes fausses. Couverte par 25 tests unitaires.
+          <strong>Interpréter des cases à cocher.</strong> Quand une case
+          cible reçoit <code>"yes"</code>, <code>"true"</code>,
+          <code>"on"</code>, <code>"1"</code>, <code>"checked"</code>,
+          qu'est-ce que ça veut dire ? Un agent tombera juste la plupart
+          du temps, faux de temps en temps. Pollen a une fonction de 10
+          lignes avec une liste de valeurs équivalentes à faux codée en
+          dur. Couverte par 25 tests unitaires.
         </p>
         <p>
           <strong>Déclencher les formulaires React.</strong> React suit
-          l'état des inputs en interne. Définir <code>.value</code> ne
-          suffit pas — il faut dispatcher des événements
-          <code>input</code>/<code>change</code> synthétiques de la bonne
-          façon. Chaque agent IA finit par buter là-dessus. Pollen le fait
-          pareil à chaque fois.
+          l'état des inputs en interne. Affecter <code>.value</code> ne
+          suffit pas — il faut dispatcher les événements
+          <code>input</code>/<code>change</code> synthétiques comme il
+          faut. Tous les agents IA finissent par se prendre les pieds
+          dedans. Pollen le fait de la même façon à chaque fois.
         </p>
         <p>
-          <strong>Sélecteurs fiables.</strong> <code>#username</code> est
-          un ID stable.
-          <code>div &gt; div &gt; form &gt; div:nth-child(3) &gt; input:nth-child(2)</code>
-          ne l'est pas. Un agent n'a aucune idée du chemin qu'il choisit.
-          Pollen préfère l'ID, se rabat sur un attribut <code>name</code>,
-          et n'utilise un chemin structurel qu'en dernier recours — un
-          choix fait une fois, mis en cache pour toujours.
+          <strong>Des sélecteurs fiables.</strong> <code>#username</code>,
+          c'est un ID stable.
+          <code>div &gt; div &gt; form &gt; div:nth-child(3) &gt; input:nth-child(2)</code>,
+          non. Un agent n'a aucune idée du chemin qu'il pioche. Pollen
+          prend l'ID en priorité, se rabat sur un attribut
+          <code>name</code>, et ne passe à un chemin structurel qu'en
+          dernier recours — un choix fait une seule fois, mis en cache
+          pour toujours.
         </p>
         <p>
-          Ce ne sont pas des cas exotiques. C'est le pain quotidien de
-          l'automatisation de formulaires. Et sur chacun de ces cas, une
-          implémentation déterministe bat un appel de modèle sur tous les
-          axes : exactitude, vitesse, coût, débogabilité.
+          Rien d'exotique dans tout ça. C'est le pain quotidien de
+          l'automatisation de formulaires. Et à chaque fois, une
+          implémentation déterministe bat un appel de modèle sur tous
+          les axes : exactitude, rapidité, coût, débogabilité.
         </p>
 
-        <h2>Là où l'IA est en fait meilleure que les heuristiques</h2>
+        <h2>Là où l'IA est vraiment meilleure que les heuristiques</h2>
         <p>
-          Le seul endroit où on ne peut pas battre l'IA, c'est
-          l'appariement sémantique arbitraire entre des sites qu'on n'a
-          jamais vus. Exemple :
+          Le seul terrain sur lequel on ne peut pas battre l'IA, c'est
+          l'appariement sémantique entre des sites qu'on n'a jamais vus.
+          Exemple :
         </p>
         <ul>
-          <li>Intitulé source : <code>Numéro de téléphone*</code></li>
-          <li>Intitulé cible : <code>Contact phone number</code></li>
+          <li>Libellé source : <code>Numéro de téléphone*</code></li>
+          <li>Libellé cible : <code>Contact phone number</code></li>
         </ul>
         <p>
-          Une règle codée en dur devrait anticiper chaque langue, chaque
-          formulation, chaque synonyme. Claude sait que c'est pareil. C'est
-          pour ça qu'on l'utilise. <strong>Une fois.</strong> Par paire
-          source-cible.
+          Une règle codée en dur devrait anticiper toutes les langues,
+          toutes les formulations, tous les synonymes. Claude sait que
+          c'est la même chose. C'est précisément pour ça qu'on l'utilise.
+          <strong>Une fois.</strong> Par paire source-cible.
         </p>
         <p>
-          Si un utilisateur avancé veut ajuster une correspondance — par
-          exemple, « en fait, pointer notre champ <code>email</code> vers
+          Et si un utilisateur avancé veut ajuster une correspondance —
+          genre « en fait, pointe notre champ <code>email</code> vers
           <code>work_email</code> de la cible, pas
           <code>personal_email</code> » — c'est une liste déroulante dans
           l'UI, pas un nouveau prompt.
@@ -772,53 +777,54 @@ el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <sp
         </div>
 
         <p>
-          Après dix exécutions du même flow, Pollen a fait
-          <strong>un</strong> appel IA. Un agent en a fait dix — et en fera
-          dix de plus demain.
+          Au bout de dix passages sur le même flow, Pollen a fait
+          <strong>un</strong> appel IA. Un agent en a fait dix — et il en
+          fera dix de plus demain.
         </p>
 
         <h2>Le chiffre de fiabilité</h2>
         <p>
-          On ne prétendrait pas « 100 % fiable sur tous les sites d'internet »
-          — c'est du discours marketing, et internet est un environnement
-          hostile (iframes, shadow DOM, heuristiques anti-automatisation,
-          widgets React custom, restrictions CSP). Ce qu'on prétend,
-          <em>par contre</em>, c'est ceci :
+          Pas question de prétendre « 100 % fiable sur tous les sites
+          d'internet » — c'est un argument marketing, et internet est un
+          environnement hostile (iframes, shadow DOM, heuristiques
+          anti-automatisation, widgets React custom, restrictions CSP).
+          En revanche, ce qu'on affirme, c'est ceci :
         </p>
         <blockquote>
-          Une fois la correspondance établie, l'étape de remplissage
-          elle-même est déterministe. Les mêmes entrées produisent les
-          mêmes mutations du DOM, à chaque fois, mesurées en millisecondes.
+          Une fois la correspondance établie, l'étape de remplissage est
+          déterministe. Les mêmes entrées produisent les mêmes mutations
+          du DOM, à chaque fois, en quelques millisecondes.
         </blockquote>
         <p>
-          C'est une garantie bien plus forte qu'un agent ne peut jamais
+          C'est une garantie bien plus forte qu'un agent ne pourra jamais
           offrir, parce que l'étape de remplissage d'un agent est
-          elle-même une séquence de tokens échantillonnée. La variance de
-          Pollen vit entièrement dans l'étape de correspondance — où vous
-          pouvez la <em>voir</em> (scores de confiance), la modifier (clic
-          pour refaire), et la figer (en cache).
+          elle-même une séquence de tokens échantillonnée. Toute la
+          variance de Pollen se concentre dans l'étape de correspondance
+          — où vous pouvez la <em>voir</em> (scores de confiance), la
+          modifier (un clic pour refaire), et la figer (c'est en cache).
         </p>
         <p>
-          Vous n'avez pas à faire confiance au modèle au runtime. Vous avez
-          juste à lui faire confiance pendant trente secondes à la config.
+          Vous n'avez pas à faire confiance au modèle à l'exécution. Vous
+          avez juste à lui faire confiance pendant trente secondes, le
+          temps de la config.
         </p>
 
-        <h2>Quand voudriez-vous encore un agent complet ?</h2>
+        <h2>Quand a-t-on encore vraiment besoin d'un agent complet ?</h2>
         <p>Honnêtement :</p>
         <ul>
           <li>
             <strong>Tâches avec raisonnement multi-étapes.</strong> Si le
-            workflow c'est « trouve la commande avec la date d'expédition
-            la plus récente, vérifie si le transporteur propose la
-            livraison en deux jours, puis demande un remboursement via le
-            flow de ce vendeur » — c'est un problème d'agent. Aucune
-            heuristique ne peut exprimer « vérifier, puis brancher, puis
-            composer ».
+            workflow c'est « trouve la commande avec la date
+            d'expédition la plus récente, regarde si le transporteur
+            propose la livraison en deux jours, puis demande un
+            remboursement via le flow de ce vendeur » — là, c'est un
+            boulot d'agent. Aucune heuristique ne peut exprimer
+            « vérifier, puis bifurquer, puis composer ».
           </li>
           <li>
-            <strong>Découverte d'UI véritablement inédite.</strong> Un
+            <strong>Une UI totalement inédite à découvrir.</strong> Un
             site avec une interaction vraiment unique qui n'a jamais été
-            scriptée, où vous voulez que la machine trouve elle-même.
+            scriptée, où vous voulez que la machine se débrouille seule.
           </li>
           <li>
             <strong>Recherche et synthèse.</strong> Crawl, résumés,
@@ -826,35 +832,36 @@ el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <sp
           </li>
         </ul>
         <p>
-          Si vous remplissez des formulaires, soumettez des données,
-          extrayez des listes vers un flow cible, ou refaites le même
-          transfert multi-sites de façon répétée — chacun de ces problèmes
-          est borné, structuré et récurrent. La structure, c'est ce que
-          les heuristiques avalent au petit-déjeuner.
+          Mais si vous remplissez des formulaires, soumettez des données,
+          scrapez des listes pour les renvoyer dans un flow cible, ou
+          refaites le même transfert entre deux sites en boucle — chacun
+          de ces problèmes est borné, structuré et récurrent. Et la
+          structure, c'est ce que les heuristiques avalent au
+          petit-déjeuner.
         </p>
 
-        <h2>L'essentiel</h2>
-        <p>Le débat, ce n'est pas « IA ou pas d'IA ». C'est « combien d'IA, et où ? »</p>
+        <h2>Ce qu'il faut retenir</h2>
+        <p>Le débat n'est pas « IA ou pas d'IA ». Il est « combien d'IA, et à quel endroit ? »</p>
         <p>
-          Les agents navigateur autonomes disent : toute l'IA, partout,
-          tout le temps. Payez en temps, en argent et en confiance.
+          Les agents navigateur autonomes disent : de l'IA partout, tout
+          le temps. Payez en temps, en argent et en confiance.
         </p>
         <p>
           Pollen dit :
           <strong
             >des heuristiques pour le travail mécanique, une touche d'IA
-            pour l'unique étape de classification qui en a vraiment
+            pour la seule étape de classification qui en a vraiment
             besoin, et du cache pour ne jamais payer deux fois.</strong
           >
-          Assez rapide pour être imperceptible. Assez bon marché pour être
-          gratuit après la première fois. Assez déterministe pour être
-          utilisé sans surveillance.
+          Assez rapide pour ne pas se voir. Assez bon marché pour être
+          gratuit après le premier passage. Assez déterministe pour
+          tourner sans surveillance.
         </p>
         <p>
-          Le cycle de la hype va repartir en sens inverse. Quand ça
-          arrivera, l'automatisation ennuyeuse sera toujours là —
-          finissant tranquillement en 200 millisecondes pendant que
-          l'agent dans l'onglet d'à côté est encore en train de lire la
+          Le cycle de la hype finira par basculer dans l'autre sens.
+          Quand ça arrivera, l'automatisation ennuyeuse sera toujours là
+          — à finir tranquillement en 200 millisecondes pendant que
+          l'agent de l'onglet d'à côté est encore en train de lire la
           page.
         </p>
 

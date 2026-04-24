@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>L'argument pour l'automatisation ennuyeuse — Pollen</title>
+    <meta
+      name="description"
+      content="Pourquoi Pollen utilise des heuristiques et une touche d'IA — pas un agent navigateur — et finit par être plus rapide, moins cher et plus fiable que la hype."
+    />
+    <meta property="og:title" content="L'argument pour l'automatisation ennuyeuse" />
+    <meta
+      property="og:description"
+      content="Pourquoi Pollen utilise des heuristiques et une touche d'IA — pas un agent navigateur — et finit par être plus rapide, moins cher et plus fiable que la hype."
+    />
+    <meta property="og:type" content="article" />
+    <link rel="icon" type="image/svg+xml" href="/assets/pollen.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --amber-300: #fcd34d;
+        --amber-400: #fbbf24;
+        --amber-500: #f59e0b;
+        --amber-700: #b45309;
+        --amber-900: #78350f;
+        --cream: #fef3c7;
+        --cream-soft: #fffbeb;
+        --ink: #2a1a07;
+        --ink-soft: #6b4a1f;
+        --ink-muted: #8c6a38;
+        --rule: rgba(180, 83, 9, 0.12);
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background: var(--cream-soft);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Nav */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 251, 235, 0.8);
+        border-bottom: 1px solid var(--rule);
+      }
+      .nav-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 20px;
+        color: var(--amber-900);
+        text-decoration: none;
+      }
+      .brand img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(180, 83, 9, 0.22);
+      }
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--ink-soft);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .nav-back:hover {
+        color: var(--amber-700);
+      }
+      .nav-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .lang-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        padding: 3px;
+        background: var(--cream);
+        border: 1px solid rgba(180, 83, 9, 0.15);
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .lang-switch a {
+        padding: 4px 10px;
+        border-radius: 999px;
+        color: var(--ink-soft);
+        text-decoration: none;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+        line-height: 1;
+      }
+      .lang-switch a.active {
+        background: var(--white);
+        color: var(--amber-900);
+        box-shadow: 0 1px 2px rgba(180, 83, 9, 0.12);
+      }
+      .lang-switch a:hover:not(.active) {
+        color: var(--amber-700);
+      }
+
+      /* Article */
+      article {
+        padding: 72px 0 96px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--amber-700);
+        margin-bottom: 18px;
+      }
+      article h1 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: clamp(34px, 5vw, 52px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--amber-900);
+        margin-bottom: 16px;
+      }
+      .subtitle {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(18px, 2.2vw, 22px);
+        line-height: 1.4;
+        color: var(--ink-muted);
+        margin-bottom: 40px;
+      }
+      .subtitle em {
+        color: var(--amber-700);
+      }
+      .byline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--ink-soft);
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--amber-400),
+          var(--amber-700)
+        );
+      }
+
+      article h2 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: clamp(24px, 3vw, 30px);
+        line-height: 1.2;
+        letter-spacing: -0.015em;
+        color: var(--amber-900);
+        margin-top: 56px;
+        margin-bottom: 18px;
+      }
+
+      article p {
+        font-size: 17.5px;
+        line-height: 1.7;
+        color: var(--ink);
+        margin-bottom: 22px;
+      }
+
+      article ul,
+      article ol {
+        margin: 0 0 22px 24px;
+      }
+      article li {
+        font-size: 17.5px;
+        line-height: 1.7;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      article li strong {
+        color: var(--amber-900);
+      }
+
+      article strong {
+        color: var(--amber-900);
+        font-weight: 600;
+      }
+      article em {
+        color: var(--ink);
+        font-style: italic;
+      }
+
+      article a {
+        color: var(--amber-700);
+        text-decoration: underline;
+        text-decoration-color: rgba(180, 83, 9, 0.3);
+        text-underline-offset: 3px;
+      }
+      article a:hover {
+        text-decoration-color: var(--amber-700);
+      }
+
+      article blockquote {
+        position: relative;
+        margin: 32px 0;
+        padding: 22px 28px;
+        background: linear-gradient(
+          135deg,
+          rgba(254, 243, 199, 0.6),
+          rgba(253, 230, 138, 0.35)
+        );
+        border-left: 3px solid var(--amber-500);
+        border-radius: 0 12px 12px 0;
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 19px;
+        line-height: 1.5;
+        color: var(--amber-900);
+      }
+
+      article code {
+        font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+        font-size: 0.88em;
+        background: var(--cream);
+        color: var(--amber-900);
+        padding: 2px 7px;
+        border-radius: 5px;
+        border: 1px solid var(--rule);
+      }
+
+      article pre {
+        background: #2a1a07;
+        color: #fef3c7;
+        padding: 22px 24px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 24px 0;
+        box-shadow: 0 10px 30px -12px rgba(120, 53, 15, 0.4);
+      }
+      article pre code {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        border: none;
+        font-size: inherit;
+      }
+      .tok-kw {
+        color: #fcd34d;
+      }
+      .tok-str {
+        color: #fef3c7;
+      }
+      .tok-com {
+        color: #a8956a;
+        font-style: italic;
+      }
+      .tok-fn {
+        color: #fbbf24;
+      }
+      .tok-type {
+        color: #fcd34d;
+        font-weight: 500;
+      }
+
+      article hr {
+        border: none;
+        border-top: 1px solid var(--rule);
+        margin: 48px 0;
+      }
+
+      .table-wrap {
+        margin: 32px 0;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--rule);
+        background: var(--white);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14.5px;
+      }
+      th,
+      td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--rule);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      th {
+        background: var(--cream);
+        color: var(--amber-900);
+        font-weight: 600;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      td {
+        color: var(--ink);
+        vertical-align: top;
+      }
+      td:first-child {
+        font-weight: 500;
+        color: var(--amber-900);
+      }
+      td.good {
+        color: var(--amber-700);
+      }
+
+      /* CTA at end */
+      .article-cta {
+        margin-top: 64px;
+        padding: 40px 32px;
+        background: linear-gradient(
+          135deg,
+          var(--amber-400) 0%,
+          var(--amber-500) 55%,
+          var(--amber-700) 100%
+        );
+        border-radius: 20px;
+        color: var(--cream-soft);
+        text-align: center;
+      }
+      .article-cta h3 {
+        font-family: "Fraunces", serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: var(--cream-soft);
+        margin-bottom: 8px;
+      }
+      .article-cta p {
+        color: rgba(255, 251, 235, 0.88);
+        font-size: 15px;
+        margin-bottom: 18px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 22px;
+        background: var(--cream-soft);
+        color: var(--amber-900);
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: transform 0.15s ease, background 0.2s ease;
+      }
+      .btn:hover {
+        background: var(--white);
+        transform: translateY(-1px);
+      }
+
+      /* Footer */
+      footer {
+        padding: 32px 0 48px;
+        border-top: 1px solid var(--rule);
+        font-size: 13px;
+        color: var(--ink-soft);
+        text-align: center;
+      }
+      footer a {
+        color: var(--amber-700);
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-inner">
+        <a href="/fr/" class="brand">
+          <img src="/assets/pollen.svg" alt="Logo Pollen" />
+          Pollen
+        </a>
+        <div class="nav-actions">
+          <div class="lang-switch" role="group" aria-label="Langue">
+            <a href="/en/blog/the-case-for-boring-automation.html" data-lang="en">EN</a>
+            <a href="/fr/blog/lautomatisation-ennuyeuse.html" data-lang="fr" class="active">FR</a>
+          </div>
+          <a href="/fr/" class="nav-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Retour à Pollen
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <script>
+      document.querySelectorAll("[data-lang]").forEach((el) => {
+        el.addEventListener("click", () => {
+          localStorage.setItem("pollen-lang", el.dataset.lang);
+        });
+      });
+    </script>
+
+    <article>
+      <div class="wrap">
+        <div class="eyebrow">Philosophie</div>
+        <h1>L'argument pour l'automatisation ennuyeuse</h1>
+        <p class="subtitle">
+          Pourquoi Pollen utilise des heuristiques et <em>une touche</em>
+          d'IA — pas un agent navigateur — et finit par être plus rapide,
+          moins cher et plus fiable que la hype.
+        </p>
+
+        <p>
+          Si vous avez suivi la conversation sur les « agents IA » ces
+          derniers mois, vous avez entendu ce pitch : un agent autonome
+          regarde votre écran, lit la page, raisonne sur ce qu'il faut
+          faire, et clique son chemin à travers n'importe quel site web.
+          Langage naturel en entrée, tâche accomplie en sortie. Pas de
+          sélecteurs. Pas de scripts. Pas d'intégrations.
+        </p>
+
+        <p>
+          C'est une démo convaincante. C'est aussi, pour la tâche
+          d'automatisation la plus courante sur le web —
+          <strong>remplir un formulaire</strong> — presque toujours le
+          mauvais outil.
+        </p>
+
+        <p>
+          Pollen prend le pari inverse. Nous avons écrit une extension
+          Chrome qui capture les données d'un formulaire sur un site et les
+          remplit dans un formulaire d'un autre, sur des pages arbitraires
+          que nous n'avons jamais vues. Nous avons envisagé de la construire
+          comme un agent autonome. Nous avons décidé de ne pas le faire. Cet
+          article explique pourquoi.
+        </p>
+
+        <p>
+          Résumé en une ligne :
+          <strong>utiliser l'IA exactement là où elle apporte de la valeur, et pas plus loin.</strong>
+        </p>
+
+        <hr />
+
+        <h2>Ce que promettent les agents navigateur autonomes</h2>
+        <p>
+          Le pitch s'écrit tout seul. Vous dites à un agent : « Remplis le
+          formulaire d'inscription sur le site B avec les mêmes données que
+          je viens de soumettre sur le site A. » L'agent :
+        </p>
+        <ol>
+          <li>Regarde votre écran (ou lit le DOM)</li>
+          <li>Raisonne sur ce que veulent dire les champs</li>
+          <li>Clique, tape, fait défiler, soumet</li>
+        </ol>
+        <p>
+          Sous le capot, c'est un LLM dans une boucle serrée avec un driver
+          de navigateur — computer use API de Claude, Browser Use, Skyvern,
+          OpenAI Operator, Stagehand, Lavague. Choisissez votre arme.
+          L'interface c'est du langage naturel ; le backend c'est un modèle
+          qui génère des actions.
+        </p>
+        <p>Quand ça marche, ça a l'air magique.</p>
+
+        <h2>Ce que les agents navigateur autonomes vous coûtent vraiment</h2>
+        <p>
+          Quand ça ne marche pas — c'est-à-dire la plupart du temps, à
+          grande échelle — voici ce que vous payez :
+        </p>
+        <p>
+          <strong>Latence.</strong> Une exécution d'agent, c'est une boucle
+          LLM. Chaque étape : capture d'écran → tokenisation → raisonnement
+          → action → attente de la page → on recommence. Un seul formulaire
+          prend <strong>30 à 120 secondes</strong>. Multipliez ça par 100
+          soumissions et vous regardez la peinture sécher.
+        </p>
+        <p>
+          <strong>Argent.</strong> Chaque étape facture des tokens. Les
+          agents style computer-use envoient des captures d'écran entières
+          dans le contexte ; les agents qui lisent le DOM envoient des
+          morceaux de HTML sérialisé. Le coût réel par remplissage se
+          situe entre <strong>0,10 $ et 1,00 $</strong>, selon le modèle
+          et la complexité de la page.
+        </p>
+        <p>
+          <strong>Non-déterminisme.</strong> Les LLM sont probabilistes.
+          Lancez deux fois le même prompt, obtenez deux actions
+          différentes. Un agent peut :
+        </p>
+        <ul>
+          <li>Rater un champ obligatoire et soumettre quand même</li>
+          <li>Choisir la mauvaise option dans une liste déroulante</li>
+          <li>S'arrêter à mi-chemin parce qu'il pense avoir fini</li>
+          <li>Halluciner un bouton qui n'existe pas et refuser de continuer</li>
+        </ul>
+        <p>
+          Vous ne le découvrez qu'une fois la soumission déjà corrompue à
+          l'autre bout.
+        </p>
+        <p>
+          <strong>Échec silencieux.</strong> Un script qui plante lève une
+          exception. Un agent qui échoue renvoie un rapport de succès
+          plausible. Vous découvrez le problème plus tard, quand quelqu'un
+          demande pourquoi la moitié de vos enregistrements sont vides.
+        </p>
+        <p>
+          <strong>Débogabilité.</strong> Demandez « pourquoi l'agent a
+          fait ça ? » et la réponse, dans le meilleur des cas, est une
+          trace de chaîne de pensée. Dans le pire, un haussement d'épaules.
+          On ne pose pas de breakpoint sur une distribution de probabilité.
+        </p>
+        <p>
+          <strong>Détection de bots.</strong> Les agents tapent à des
+          vitesses surhumaines, ne bougent pas la souris naturellement, et
+          récupèrent la même page selon le même schéma à chaque
+          exécution. Les fournisseurs de CAPTCHA s'améliorent pour
+          signaler ce comportement. Bonne chance quand la facture
+          mensuelle arrive.
+        </p>
+        <p>
+          <strong>Sécurité.</strong> La plupart des architectures d'agents
+          font transiter vos identifiants par un service cloud qui pilote
+          ensuite un navigateur pour se connecter à votre place. Ça fait
+          deux sauts de confiance supplémentaires pour chaque mot de passe.
+        </p>
+        <p>
+          <strong>Zéro cache par défaut.</strong> Chaque exécution est un
+          nouvel appel LLM, même pour un site que vous automatisez depuis
+          mille fois. Il n'y a rien à apprendre des exécutions passées
+          sans travail d'ingénierie supplémentaire.
+        </p>
+        <p>
+          Au final : vous payez cher pour lancer un processus lent,
+          imprévisible, non auditable et de sécurité douteuse qui produit
+          souvent la mauvaise réponse. Pour remplir un formulaire.
+        </p>
+
+        <h2>L'alternative ennuyeuse</h2>
+        <p>Voici ce que fait Pollen à la place.</p>
+        <p>
+          L'extension est un panneau latéral Chrome Manifest V3 plus un
+          content script. Quand vous visitez votre site source, vous
+          cliquez sur Capturer. Un parcours déterministe du DOM extrait
+          chaque input, son intitulé (résolu via
+          <code>&lt;label for&gt;</code>, <code>aria-label</code>,
+          <code>&lt;label&gt;</code> englobant, placeholder, et quelques
+          heuristiques de plus — toutes écrites sous forme de code que
+          vous pouvez lire), son type, ses options s'il y en a, et sa
+          valeur actuelle.
+        </p>
+        <p>
+          Ensuite, vous naviguez vers le site cible. Vous cliquez sur
+          Analyser. L'extension lit le formulaire cible de la même façon.
+        </p>
+        <p>
+          Maintenant nous avons deux listes structurées : les champs
+          source avec leurs valeurs, les champs cibles en attente de
+          remplissage. C'est le moment où l'IA gagne son salaire — nous
+          envoyons ces deux listes (pas de captures d'écran, pas de HTML
+          complet, <strong>juste les schémas structurés</strong>) à Claude
+          avec un unique prompt de classification :
+        </p>
+        <blockquote>
+          Voici N champs source. Voici M champs cibles. Retournez un tableau
+          JSON de paires
+          <code>{sourceFieldIndex, targetSelector, confidence}</code>.
+        </blockquote>
+        <p>
+          Claude est <em>excellent</em> à ça. L'appariement sémantique
+          entre « E-mail » et « adresse email de contact » est exactement
+          ce que les LLM savent faire. C'est une tâche one-shot. ~500
+          tokens en entrée, ~200 en sortie. Coût : environ 0,005 $.
+          Temps : environ 2 secondes.
+        </p>
+        <p>
+          On met le résultat en cache. La prochaine fois que vous allez
+          du même source à la même cible, aucun appel IA.
+        </p>
+        <p>Ensuite on remplit. Cette partie est totalement déterministe :</p>
+        <pre><code><span class="tok-kw">const</span> el = document.<span class="tok-fn">querySelector</span>(mapping.targetSelector);
+el.value = value;
+el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"input"</span>, { bubbles: <span class="tok-kw">true</span> }));
+el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"change"</span>, { bubbles: <span class="tok-kw">true</span> }));
+el.<span class="tok-fn">dispatchEvent</span>(<span class="tok-kw">new</span> <span class="tok-type">Event</span>(<span class="tok-str">"blur"</span>, { bubbles: <span class="tok-kw">true</span> }));</code></pre>
+        <p>
+          C'est tout. Pas de LLM, pas de raisonnement, pas d'incertitude.
+          Si le sélecteur correspond, le champ se remplit. Sinon, on le
+          log. Remplir 50 champs prend
+          <strong>50 à 200 millisecondes</strong>.
+        </p>
+
+        <h2>Là où les heuristiques sont en fait meilleures que l'IA</h2>
+        <p>
+          La vision naïve, c'est « l'IA est la voie intelligente ; les
+          heuristiques sont la voie bête ». C'est l'inverse pour les
+          problèmes spécifiques qu'on résout. Exemples :
+        </p>
+        <p>
+          <strong>Détecter les formulaires multi-entités.</strong> Certains
+          formulaires contiennent les données de N utilisateurs en une
+          seule soumission : <code>users[0].name</code>,
+          <code>users[0].email</code>, <code>users[1].name</code>,
+          <code>users[1].email</code>. Un agent devrait déduire cette
+          structure de la page à chaque fois et se tromperait probablement
+          sur les cas limites. Le détecteur de Pollen, c'est trois regex.
+          Correct à chaque coup, en microsecondes.
+        </p>
+        <p>
+          <strong>Lire les pages de listes.</strong> Un tableau de 500
+          lignes ou une grille de 50 cartes ? Un agent essaierait de
+          scroller et de raisonner son chemin à travers. Pollen parcourt
+          <code>&lt;table&gt;</code> et <code>&lt;tbody&gt;</code>, ou
+          trouve des parents avec 3 enfants de même forme et plus, et
+          extrait en une passe.
+        </p>
+        <p>
+          <strong>Parsing de cases à cocher.</strong> Quand une case cible
+          reçoit <code>"yes"</code>, <code>"true"</code>,
+          <code>"on"</code>, <code>"1"</code>, <code>"checked"</code>, que
+          faut-il comprendre ? Un agent aura raison la plupart du temps,
+          tort parfois. Pollen a une fonction de 10 lignes avec une liste
+          codée en dur de chaînes fausses. Couverte par 25 tests unitaires.
+        </p>
+        <p>
+          <strong>Déclencher les formulaires React.</strong> React suit
+          l'état des inputs en interne. Définir <code>.value</code> ne
+          suffit pas — il faut dispatcher des événements
+          <code>input</code>/<code>change</code> synthétiques de la bonne
+          façon. Chaque agent IA finit par buter là-dessus. Pollen le fait
+          pareil à chaque fois.
+        </p>
+        <p>
+          <strong>Sélecteurs fiables.</strong> <code>#username</code> est
+          un ID stable.
+          <code>div &gt; div &gt; form &gt; div:nth-child(3) &gt; input:nth-child(2)</code>
+          ne l'est pas. Un agent n'a aucune idée du chemin qu'il choisit.
+          Pollen préfère l'ID, se rabat sur un attribut <code>name</code>,
+          et n'utilise un chemin structurel qu'en dernier recours — un
+          choix fait une fois, mis en cache pour toujours.
+        </p>
+        <p>
+          Ce ne sont pas des cas exotiques. C'est le pain quotidien de
+          l'automatisation de formulaires. Et sur chacun de ces cas, une
+          implémentation déterministe bat un appel de modèle sur tous les
+          axes : exactitude, vitesse, coût, débogabilité.
+        </p>
+
+        <h2>Là où l'IA est en fait meilleure que les heuristiques</h2>
+        <p>
+          Le seul endroit où on ne peut pas battre l'IA, c'est
+          l'appariement sémantique arbitraire entre des sites qu'on n'a
+          jamais vus. Exemple :
+        </p>
+        <ul>
+          <li>Intitulé source : <code>Numéro de téléphone*</code></li>
+          <li>Intitulé cible : <code>Contact phone number</code></li>
+        </ul>
+        <p>
+          Une règle codée en dur devrait anticiper chaque langue, chaque
+          formulation, chaque synonyme. Claude sait que c'est pareil. C'est
+          pour ça qu'on l'utilise. <strong>Une fois.</strong> Par paire
+          source-cible.
+        </p>
+        <p>
+          Si un utilisateur avancé veut ajuster une correspondance — par
+          exemple, « en fait, pointer notre champ <code>email</code> vers
+          <code>work_email</code> de la cible, pas
+          <code>personal_email</code> » — c'est une liste déroulante dans
+          l'UI, pas un nouveau prompt.
+        </p>
+
+        <h2>Les chiffres</h2>
+        <p>Pour un remplissage typique de ~10 champs :</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Pollen</th>
+                <th>Agent navigateur autonome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Premier remplissage (avec IA)</td>
+                <td class="good">~2 s + 200 ms</td>
+                <td>~60 s</td>
+              </tr>
+              <tr>
+                <td>Remplissages suivants</td>
+                <td class="good">~200 ms</td>
+                <td>~60 s (à chaque fois)</td>
+              </tr>
+              <tr>
+                <td>Coût du premier remplissage</td>
+                <td class="good">~0,005 $</td>
+                <td>~0,25 $</td>
+              </tr>
+              <tr>
+                <td>Coût des remplissages suivants</td>
+                <td class="good">0,00 $</td>
+                <td>~0,25 $ (à chaque fois)</td>
+              </tr>
+              <tr>
+                <td>Déterministe ?</td>
+                <td class="good">Oui, après le mapping</td>
+                <td>Non</td>
+              </tr>
+              <tr>
+                <td>Mise en cache ?</td>
+                <td class="good">Totale</td>
+                <td>Impossible sans refonte</td>
+              </tr>
+              <tr>
+                <td>Débogable ?</td>
+                <td class="good">Chaque décision est dans le code</td>
+                <td>Chaîne de pensée LLM</td>
+              </tr>
+              <tr>
+                <td>Échoue bruyamment ?</td>
+                <td class="good">Oui (logs si sélecteur manqué)</td>
+                <td>Rarement (mauvais remplissage silencieux)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Après dix exécutions du même flow, Pollen a fait
+          <strong>un</strong> appel IA. Un agent en a fait dix — et en fera
+          dix de plus demain.
+        </p>
+
+        <h2>Le chiffre de fiabilité</h2>
+        <p>
+          On ne prétendrait pas « 100 % fiable sur tous les sites d'internet »
+          — c'est du discours marketing, et internet est un environnement
+          hostile (iframes, shadow DOM, heuristiques anti-automatisation,
+          widgets React custom, restrictions CSP). Ce qu'on prétend,
+          <em>par contre</em>, c'est ceci :
+        </p>
+        <blockquote>
+          Une fois la correspondance établie, l'étape de remplissage
+          elle-même est déterministe. Les mêmes entrées produisent les
+          mêmes mutations du DOM, à chaque fois, mesurées en millisecondes.
+        </blockquote>
+        <p>
+          C'est une garantie bien plus forte qu'un agent ne peut jamais
+          offrir, parce que l'étape de remplissage d'un agent est
+          elle-même une séquence de tokens échantillonnée. La variance de
+          Pollen vit entièrement dans l'étape de correspondance — où vous
+          pouvez la <em>voir</em> (scores de confiance), la modifier (clic
+          pour refaire), et la figer (en cache).
+        </p>
+        <p>
+          Vous n'avez pas à faire confiance au modèle au runtime. Vous avez
+          juste à lui faire confiance pendant trente secondes à la config.
+        </p>
+
+        <h2>Quand voudriez-vous encore un agent complet ?</h2>
+        <p>Honnêtement :</p>
+        <ul>
+          <li>
+            <strong>Tâches avec raisonnement multi-étapes.</strong> Si le
+            workflow c'est « trouve la commande avec la date d'expédition
+            la plus récente, vérifie si le transporteur propose la
+            livraison en deux jours, puis demande un remboursement via le
+            flow de ce vendeur » — c'est un problème d'agent. Aucune
+            heuristique ne peut exprimer « vérifier, puis brancher, puis
+            composer ».
+          </li>
+          <li>
+            <strong>Découverte d'UI véritablement inédite.</strong> Un
+            site avec une interaction vraiment unique qui n'a jamais été
+            scriptée, où vous voulez que la machine trouve elle-même.
+          </li>
+          <li>
+            <strong>Recherche et synthèse.</strong> Crawl, résumés,
+            comparaisons — le terrain de prédilection des agents.
+          </li>
+        </ul>
+        <p>
+          Si vous remplissez des formulaires, soumettez des données,
+          extrayez des listes vers un flow cible, ou refaites le même
+          transfert multi-sites de façon répétée — chacun de ces problèmes
+          est borné, structuré et récurrent. La structure, c'est ce que
+          les heuristiques avalent au petit-déjeuner.
+        </p>
+
+        <h2>L'essentiel</h2>
+        <p>Le débat, ce n'est pas « IA ou pas d'IA ». C'est « combien d'IA, et où ? »</p>
+        <p>
+          Les agents navigateur autonomes disent : toute l'IA, partout,
+          tout le temps. Payez en temps, en argent et en confiance.
+        </p>
+        <p>
+          Pollen dit :
+          <strong
+            >des heuristiques pour le travail mécanique, une touche d'IA
+            pour l'unique étape de classification qui en a vraiment
+            besoin, et du cache pour ne jamais payer deux fois.</strong
+          >
+          Assez rapide pour être imperceptible. Assez bon marché pour être
+          gratuit après la première fois. Assez déterministe pour être
+          utilisé sans surveillance.
+        </p>
+        <p>
+          Le cycle de la hype va repartir en sens inverse. Quand ça
+          arrivera, l'automatisation ennuyeuse sera toujours là —
+          finissant tranquillement en 200 millisecondes pendant que
+          l'agent dans l'onglet d'à côté est encore en train de lire la
+          page.
+        </p>
+
+        <div class="article-cta">
+          <h3>Envie d'essayer ?</h3>
+          <p>Pollen arrive bientôt. Rejoignez la liste pour un accès anticipé.</p>
+          <a href="/fr/#waitlist" class="btn">
+            Rejoindre la liste
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <footer>
+      <div class="wrap">
+        <a href="/fr/">← Retour à Pollen</a>
+      </div>
+    </footer>
+  </body>
+</html>

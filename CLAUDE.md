@@ -48,6 +48,39 @@ When adding a new form:
 2. Set a unique `_subject` so submissions are distinguishable in the Formspree inbox.
 3. Add the same form to the FR page with translated copy.
 
+## Analytics & UTM tracking
+
+Vercel Analytics is loaded via `<script defer src="/_vercel/insights/script.js"></script>` at the bottom of each `index.html`. The shim defines `window.va` early so calls before script load are queued.
+
+### Custom events
+
+| Event | Fired when | Properties |
+|---|---|---|
+| `contact_form_submit` | Contact form returns 200 from Formspree | `lang`, plus all UTMs |
+| `waitlist_submit` | Hero or CTA waitlist form returns 200 | `lang`, `placement` (`hero` \| `cta`), plus all UTMs |
+| `calendly_open` | Any `[data-calendly]` element clicked | `lang`, `source` (e.g. `sticky`, `page`), plus all UTMs |
+| `meeting_booked` | Calendly popup posts `calendly.event_scheduled` | `lang`, plus all UTMs |
+
+Events are emitted via the helper `track(name, props)` defined in the inline script. **Always go through `track()`** — it merges the captured UTMs in automatically.
+
+### UTM convention
+
+Every paid/organic ad link must use this scheme:
+
+```
+?utm_source={google|linkedin|reddit|ph|email|x|...}
+&utm_medium={cpc|organic|social|retarget|email}
+&utm_campaign={revops-en-q2|power-fr-q2|...}
+&utm_content={creative-id-or-post-slug}
+```
+
+UTMs are captured on first page load, persisted to `sessionStorage` under `pollen-utm`, and:
+- Injected as hidden fields on every Formspree submission (visible in the inbox).
+- Passed to Calendly via `Calendly.initPopupWidget({ utm: { utmSource, utmMedium, utmCampaign, utmContent, utmTerm } })`.
+- Attached to every Vercel Analytics custom event.
+
+When adding a new ad creative, **always set all four UTMs** (`source`, `medium`, `campaign`, `content`). Missing values make attribution unreadable.
+
 ## Calendly
 
 The popup widget is loaded via `assets.calendly.com/assets/external/widget.{js,css}` in the `<head>`. Any element with `data-calendly` opens the popup on click; falls back to opening the URL in a new tab if the script hasn't loaded.
